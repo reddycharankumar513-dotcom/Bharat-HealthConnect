@@ -8,10 +8,17 @@ import { authenticateToken, requireRole, AuthenticatedRequest } from '../middlew
 
 const router = Router();
 
-// Configure Multer for secure file storage with randomized UUID keys
-const uploadDir = path.resolve(process.cwd(), 'uploads/reports');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// Configure Multer for secure file storage with randomized UUID keys (fallback to /tmp on Vercel)
+const uploadDir = process.env.VERCEL === '1'
+  ? path.join('/tmp', 'uploads', 'reports')
+  : path.resolve(process.cwd(), 'uploads/reports');
+
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (e) {
+  console.warn('Could not create lab upload directory:', e);
 }
 
 const storage = multer.diskStorage({

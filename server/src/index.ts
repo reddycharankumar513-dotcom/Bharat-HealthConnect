@@ -25,10 +25,17 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Ensure upload directory exists
-const uploadDir = path.resolve(process.cwd(), 'uploads/reports');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// Ensure upload directory exists (fallback to /tmp in serverless/Vercel)
+const uploadDir = process.env.VERCEL === '1'
+  ? path.join('/tmp', 'uploads', 'reports')
+  : path.resolve(process.cwd(), 'uploads/reports');
+
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (e) {
+  console.warn('Could not create upload directory:', e);
 }
 
 // Health check endpoint
