@@ -5,11 +5,12 @@
   "description": "Backend API for Bharat HealthConnect Healthcare Platform",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && tsc",
+    "dev": "prisma generate --schema=prisma/schema.sqlite.prisma && tsx watch src/index.ts",
+    "build": "prisma db push --schema=prisma/schema.prisma --accept-data-loss && prisma generate --schema=prisma/schema.prisma && tsc",
     "start": "node dist/index.js",
-    "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push",
+    "prisma:generate": "prisma generate --schema=prisma/schema.prisma",
+    "prisma:generate:sqlite": "prisma generate --schema=prisma/schema.sqlite.prisma",
+    "prisma:push": "prisma db push --schema=prisma/schema.prisma",
     "prisma:seed": "tsx prisma/seed.ts",
     "test": "tsx --test src/tests/integration.test.ts"
   },

@@ -5,3 +5,6 @@ uploads/reports/*
 !uploads/reports/.gitkeep
 dev.db
 dev.db-journal
+
+.vercel
+.env*
