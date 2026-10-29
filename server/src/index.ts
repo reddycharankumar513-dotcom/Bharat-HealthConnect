@@ -59,13 +59,15 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(`🏥 Bharat HealthConnect API Server`);
-  console.log(`🚀 Running at: http://localhost:${PORT}`);
-  console.log(`🌐 Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`=======================================================`);
-});
+// Start Server (only if not running in serverless environment like Vercel)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`=======================================================`);
+    console.log(`🏥 Bharat HealthConnect API Server`);
+    console.log(`🚀 Running at: http://localhost:${PORT}`);
+    console.log(`🌐 Health Check: http://localhost:${PORT}/api/health`);
+    console.log(`=======================================================`);
+  });
+}
 
 export default app;

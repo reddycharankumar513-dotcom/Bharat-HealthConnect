@@ -85,7 +85,7 @@ router.post('/login', async (req, res): Promise<void> => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, fullName: user.fullName },
       JWT_SECRET,
-      { expiresIn: rememberMe ? '30d' : JWT_EXPIRES_IN }
+      { expiresIn: (rememberMe ? '30d' : JWT_EXPIRES_IN) as any }
     );
 
     // Audit Log
@@ -232,7 +232,7 @@ router.post('/register', async (req, res): Promise<void> => {
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, role: newUser.role, fullName: newUser.fullName },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN as any }
     );
 
     res.status(201).json({
