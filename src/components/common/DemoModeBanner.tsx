@@ -33,11 +33,29 @@ export const DemoModeBanner: React.FC = () => {
       path: '/pharmacy',
       color: 'bg-emerald-500 text-white',
     },
+    staff: {
+      label: 'Staff Desk',
+      icon: <Users className="w-3.5 h-3.5" />,
+      path: '/staff/dashboard',
+      color: 'bg-indigo-500 text-white',
+    },
     laboratory: {
       label: 'Diagnostic Lab',
       icon: <FlaskConical className="w-3.5 h-3.5" />,
       path: '/laboratory',
       color: 'bg-amber-500 text-white',
+    },
+    lab_staff: {
+      label: 'Lab Tech',
+      icon: <FlaskConical className="w-3.5 h-3.5" />,
+      path: '/laboratory/samples',
+      color: 'bg-cyan-500 text-white',
+    },
+    supplier: {
+      label: 'Supplier Hub',
+      icon: <Pill className="w-3.5 h-3.5" />,
+      path: '/supplier',
+      color: 'bg-blue-500 text-white',
     },
     admin: {
       label: 'Central Admin',

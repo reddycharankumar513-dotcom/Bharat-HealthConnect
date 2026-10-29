@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "npm --prefix server run dev",
+    "test": "npm --prefix server test",
+    "seed": "npm --prefix server run prisma:seed",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

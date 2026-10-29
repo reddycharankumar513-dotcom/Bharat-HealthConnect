@@ -2,8 +2,11 @@ export type UserRole =
   | 'patient' 
   | 'doctor' 
   | 'hospital' 
+  | 'staff'
   | 'pharmacy' 
   | 'laboratory' 
+  | 'lab_staff'
+  | 'supplier'
   | 'admin';
 
 export type Language = 'en' | 'hi' | 'te' | 'ta';

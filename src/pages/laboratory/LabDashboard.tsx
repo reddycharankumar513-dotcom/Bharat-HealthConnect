@@ -4,6 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { StatCard } from '../../components/common/StatCard';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { LabReportApprovalModal } from './LabReportApprovalModal';
+import { UploadReportModal } from '../../components/laboratory/UploadReportModal';
 import { DiagnosticBooking } from '../../types';
 import { 
   FlaskConical, 
@@ -15,7 +16,9 @@ import {
   TrendingUp, 
   ShieldCheck, 
   User,
-  Barcode
+  Barcode,
+  UploadCloud,
+  FileCheck2
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -31,6 +34,7 @@ export const LabDashboard: React.FC = () => {
   const { diagnosticBookings } = useApp();
 
   const [approvalModalBooking, setApprovalModalBooking] = useState<DiagnosticBooking | null>(null);
+  const [uploadModalBooking, setUploadModalBooking] = useState<DiagnosticBooking | null>(null);
 
   const totalBookings = diagnosticBookings.length;
   const inProcessing = diagnosticBookings.filter(b => b.status === 'Processing' || b.status === 'In Transit').length;
@@ -79,7 +83,7 @@ export const LabDashboard: React.FC = () => {
       <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-center gap-2">
         <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
         <span>
-          <strong>Clinical Prototype:</strong> All patient diagnostic records, test results, and blood sample stages are simulated demonstration data.
+          <strong>Clinical Prototype:</strong> All patient diagnostic records, test results, and blood sample stages are connected to secure object storage and SQLite database.
         </span>
       </div>
 
@@ -98,35 +102,31 @@ export const LabDashboard: React.FC = () => {
           subtitle="Analytical phase"
           icon={<Clock className="w-5 h-5 text-teal-600" />}
           iconBgColor="bg-teal-50"
-          badge="In Progress"
         />
         <StatCard
-          title="Phlebotomy Scheduled"
+          title="Pending Phlebotomy"
           value={pendingCollection}
-          subtitle="Home & Lab visits"
-          icon={<Barcode className="w-5 h-5 text-sky-600" />}
-          iconBgColor="bg-sky-50"
+          subtitle="Awaiting sample collection"
+          icon={<Barcode className="w-5 h-5 text-indigo-600" />}
+          iconBgColor="bg-indigo-50"
         />
         <StatCard
-          title="Verified & Delivered"
+          title="Delivered Reports"
           value={completed}
-          subtitle="Sent to patient ABHA"
+          subtitle="Digitally published to ABHA"
           icon={<CheckCircle2 className="w-5 h-5 text-emerald-600" />}
           iconBgColor="bg-emerald-50"
         />
       </div>
 
-      {/* Active Sample Queue & Weekly Volume */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Sample Queue */}
+      {/* Main Grid: Live Orders + Volume Analytics */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Active Test Orders Table */}
         <div className="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200 shadow-card space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <ClipboardCheck className="w-4 h-4 text-teal-600" />
-              Active Diagnostic Samples Awaiting Processing & Verification
-            </h3>
-            <Link to="/laboratory/samples" className="text-xs font-semibold text-teal-600 hover:underline">
-              View All
+            <h3 className="text-base font-bold text-slate-900">Active Diagnostic Requisitions</h3>
+            <Link to="/laboratory/samples" className="text-xs text-amber-600 font-bold hover:underline">
+              View All Samples →
             </Link>
           </div>
 
@@ -148,18 +148,31 @@ export const LabDashboard: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  {/* CRITICAL FEATURE: Upload Report Modal Action */}
+                  <button
+                    type="button"
+                    onClick={() => setUploadModalBooking(b)}
+                    className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-xs shadow-2xs transition-colors flex items-center gap-1"
+                    title="Upload PDF or Scanned Pathology Report"
+                  >
+                    <UploadCloud className="w-3.5 h-3.5" />
+                    <span>Upload Report</span>
+                  </button>
+
                   {b.status === 'Processing' && (
                     <button
                       onClick={() => setApprovalModalBooking(b)}
-                      className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-xs shadow-2xs transition-colors flex items-center gap-1"
+                      className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs shadow-2xs transition-colors flex items-center gap-1"
                     >
                       <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>Review & Sign</span>
+                      <span>Review</span>
                     </button>
                   )}
-                  {b.status === 'Verified & Approved' && (
-                    <span className="text-emerald-700 font-bold text-[11px] bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                      Delivered
+
+                  {(b.status === 'Verified & Approved' || b.status === 'Delivered to Patient') && (
+                    <span className="text-emerald-700 font-bold text-[11px] bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 flex items-center gap-1">
+                      <FileCheck2 className="w-3 h-3 text-emerald-600" />
+                      <span>Delivered</span>
                     </span>
                   )}
                 </div>
@@ -190,6 +203,14 @@ export const LabDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Upload Diagnostic Report Modal */}
+      <UploadReportModal
+        isOpen={!!uploadModalBooking}
+        onClose={() => setUploadModalBooking(null)}
+        booking={uploadModalBooking}
+      />
+
+      {/* Pathology Review Modal */}
       <LabReportApprovalModal
         isOpen={!!approvalModalBooking}
         onClose={() => setApprovalModalBooking(null)}

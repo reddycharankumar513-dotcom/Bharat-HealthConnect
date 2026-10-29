@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Medicine } from '../../types';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { PurchaseOrderModal } from './PurchaseOrderModal';
 import { StockAdjustmentModal } from './StockAdjustmentModal';
+import { QRScannerModal } from '../../components/pharmacy/QRScannerModal';
+import { QRCodeModal } from '../../components/pharmacy/QRCodeModal';
 import { 
   Pill, 
   Search, 
@@ -15,7 +18,10 @@ import {
   CheckCircle2, 
   Plus, 
   Building2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  QrCode,
+  History,
+  Camera
 } from 'lucide-react';
 
 export const PharmacyInventoryPage: React.FC = () => {
@@ -27,6 +33,8 @@ export const PharmacyInventoryPage: React.FC = () => {
 
   const [reorderMedicine, setReorderMedicine] = useState<Medicine | null>(null);
   const [adjustMedicine, setAdjustMedicine] = useState<Medicine | null>(null);
+  const [isQRScannerOpen, setIsQRScannerOpen] = useState(false);
+  const [qrCodeMedicine, setQrCodeMedicine] = useState<Medicine | null>(null);
 
   const categories = ['All', 'Antibiotic', 'Anti-Diabetic', 'Cardiovascular', 'Gastrointestinal', 'Respiratory & Anti-Allergic'];
   const statuses = ['All', 'In Stock', 'Low Stock', 'Expiring Soon'];
@@ -44,7 +52,7 @@ export const PharmacyInventoryPage: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header */}
+      {/* Header with QR Scanner Action */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
@@ -52,17 +60,37 @@ export const PharmacyInventoryPage: React.FC = () => {
             Pharmacy Inventory & Automated Threshold Tracker
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Real-time formulary stock levels, batch expiry tracking, and direct supplier procurement
+            Real-time formulary stock levels, batch expiry tracking, and QR barcode sales deduction
           </p>
         </div>
 
-        <button
-          onClick={() => showToast('Demo: Open Formulary Addition Form', 'info')}
-          className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs rounded-xl shadow-2xs flex items-center gap-1.5 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Formulation</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* CRITICAL FEATURE: QR Scanner Action */}
+          <button
+            type="button"
+            onClick={() => setIsQRScannerOpen(true)}
+            className="px-4 py-2.5 bg-gradient-to-r from-teal-600 to-medblue-700 hover:from-teal-700 hover:to-medblue-800 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
+          >
+            <Camera className="w-4 h-4 text-teal-200" />
+            <span>Scan Medicine QR Code</span>
+          </button>
+
+          <Link
+            to="/pharmacy/transactions"
+            className="px-3.5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs flex items-center gap-1.5 transition-colors"
+          >
+            <History className="w-4 h-4 text-slate-500" />
+            <span>Stock Ledger</span>
+          </Link>
+
+          <button
+            onClick={() => showToast('Demo: Formulary registration window', 'info')}
+            className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Drug</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -103,37 +131,22 @@ export const PharmacyInventoryPage: React.FC = () => {
             </select>
           </div>
         </div>
-
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-          <span>Found <strong>{filteredMedicines.length}</strong> formulation records</span>
-          {(searchTerm || selectedCategory !== 'All' || selectedStatus !== 'All') && (
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedCategory('All');
-                setSelectedStatus('All');
-              }}
-              className="text-teal-600 hover:underline font-semibold"
-            >
-              Reset Filters
-            </button>
-          )}
-        </div>
       </div>
 
-      {/* Main Inventory Table with All Required Fields */}
-      <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-card">
+      {/* Inventory Table */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
-              <tr>
-                <th className="p-3.5">Medicine Name & Generic</th>
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px]">
+                <th className="p-3.5">Medicine & Formulation</th>
+                <th className="p-3.5">Category</th>
                 <th className="p-3.5">SKU & Batch</th>
                 <th className="p-3.5 text-center">Available Stock</th>
-                <th className="p-3.5 text-center">Threshold</th>
+                <th className="p-3.5 text-center">Min Threshold</th>
                 <th className="p-3.5 text-center">Suggested Reorder</th>
                 <th className="p-3.5">Expiry Date</th>
-                <th className="p-3.5">Registered Supplier</th>
+                <th className="p-3.5">Supplier</th>
                 <th className="p-3.5">Status</th>
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
@@ -143,40 +156,38 @@ export const PharmacyInventoryPage: React.FC = () => {
                 const isBreached = med.quantity <= med.minThreshold;
 
                 return (
-                  <tr
-                    key={med.id}
-                    className={`hover:bg-slate-50/80 transition-colors ${
-                      isBreached ? 'bg-rose-50/20' : ''
-                    }`}
-                  >
-                    {/* Medicine name & Generic */}
+                  <tr key={med.id} className="hover:bg-slate-50/80 transition-colors">
+                    {/* Medicine Name & Details */}
                     <td className="p-3.5">
-                      <strong className="block text-slate-900 font-bold text-xs sm:text-sm">
-                        {med.name}
-                      </strong>
-                      <span className="text-[11px] text-slate-500 italic line-clamp-1">
-                        {med.genericName}
+                      <div className="font-bold text-slate-900">{med.name}</div>
+                      <div className="text-[11px] text-slate-500 line-clamp-1">{med.genericName}</div>
+                      <span className="text-[10px] text-teal-700 font-medium">₹{med.unitPrice.toFixed(2)}/unit</span>
+                    </td>
+
+                    {/* Category */}
+                    <td className="p-3.5 text-slate-700">
+                      <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md text-[10px] font-medium">
+                        {med.category}
                       </span>
                     </td>
 
                     {/* SKU & Batch */}
-                    <td className="p-3.5">
-                      <span className="font-mono text-slate-700 block font-semibold">{med.sku}</span>
-                      <span className="font-mono text-[10px] text-slate-400">Batch: {med.batchNumber}</span>
+                    <td className="p-3.5 font-mono text-[11px] text-slate-600">
+                      <div>{med.sku}</div>
+                      <div className="text-slate-400">Batch: {med.batchNumber}</div>
                     </td>
 
-                    {/* Current Quantity */}
+                    {/* Available Stock */}
                     <td className="p-3.5 text-center">
-                      <span className={`inline-block font-extrabold text-sm ${
-                        isBreached ? 'text-rose-600 bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200' : 'text-slate-900'
+                      <span className={`inline-block px-2.5 py-1 rounded-full font-bold font-mono text-xs ${
+                        isBreached ? 'bg-rose-100 text-rose-800 animate-pulse' : 'bg-emerald-100 text-emerald-800'
                       }`}>
                         {med.quantity}
                       </span>
-                      <span className="block text-[10px] text-slate-400">units</span>
                     </td>
 
-                    {/* Minimum Threshold */}
-                    <td className="p-3.5 text-center font-semibold text-slate-700">
+                    {/* Threshold */}
+                    <td className="p-3.5 text-center font-mono text-slate-500">
                       {med.minThreshold}
                     </td>
 
@@ -207,6 +218,16 @@ export const PharmacyInventoryPage: React.FC = () => {
                     {/* Actions */}
                     <td className="p-3.5 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5">
+                        {/* Print / View QR Label */}
+                        <button
+                          type="button"
+                          onClick={() => setQrCodeMedicine(med)}
+                          className="p-1.5 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-xl transition-colors"
+                          title="Generate & Print Standard Batch QR Label"
+                        >
+                          <QrCode className="w-3.5 h-3.5" />
+                        </button>
+
                         <button
                           onClick={() => setReorderMedicine(med)}
                           className={`px-3 py-1.5 text-xs font-semibold rounded-xl flex items-center gap-1 transition-colors ${
@@ -237,13 +258,27 @@ export const PharmacyInventoryPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Modals */}
+      {/* QR Scanner Modal for Live Scanning & Confirmed Stock Deduction */}
+      <QRScannerModal
+        isOpen={isQRScannerOpen}
+        onClose={() => setIsQRScannerOpen(false)}
+      />
+
+      {/* QR Label Print Modal */}
+      <QRCodeModal
+        isOpen={!!qrCodeMedicine}
+        onClose={() => setQrCodeMedicine(null)}
+        medicine={qrCodeMedicine}
+      />
+
+      {/* Purchase Order Reorder Modal */}
       <PurchaseOrderModal
         isOpen={!!reorderMedicine}
         onClose={() => setReorderMedicine(null)}
         medicine={reorderMedicine}
       />
 
+      {/* Stock Adjustment Modal */}
       <StockAdjustmentModal
         isOpen={!!adjustMedicine}
         onClose={() => setAdjustMedicine(null)}

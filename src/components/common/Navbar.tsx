@@ -197,14 +197,22 @@ export const Navbar: React.FC = () => {
               )}
             </div>
 
-            {/* Portal Profile Hub / Role Switch Button */}
-            <Link
-              to="/roles"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-xs transition-colors"
-            >
-              <User className="w-3.5 h-3.5" />
-              <span className="capitalize">{currentRole} Portal</span>
-            </Link>
+            {/* Portal Profile Hub & Login */}
+            <div className="flex items-center gap-1.5">
+              <Link
+                to="/login"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                <span>Sign In</span>
+              </Link>
+              <Link
+                to="/roles"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-xs transition-colors"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span className="capitalize">{currentRole} Portal</span>
+              </Link>
+            </div>
 
             {/* Mobile menu toggle */}
             <button

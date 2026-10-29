@@ -1,0 +1,7 @@
+node_modules
+dist
+.env
+uploads/reports/*
+!uploads/reports/.gitkeep
+dev.db
+dev.db-journal

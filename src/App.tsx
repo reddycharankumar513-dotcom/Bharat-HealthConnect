@@ -6,10 +6,13 @@ import { AppProvider } from './context/AppContext';
 import { PublicShell } from './layouts/PublicShell';
 import { AppShell } from './layouts/AppShell';
 
-// Public Pages
+// Public & Auth Pages
 import { LandingPage } from './pages/public/LandingPage';
 import { RoleSelectorPage } from './pages/public/RoleSelectorPage';
 import { EmergencyPage } from './pages/public/EmergencyPage';
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 
 // Shared Discovery Pages (wrapped in PublicShell so patients/public can search)
 import { HospitalDiscoveryPage } from './pages/patient/HospitalDiscoveryPage';
@@ -22,27 +25,35 @@ import { PatientAppointmentsPage } from './pages/patient/PatientAppointmentsPage
 import { PatientProfilePage } from './pages/patient/PatientProfilePage';
 import { PatientMedicalRecordsPage } from './pages/patient/PatientMedicalRecordsPage';
 import { PatientPaymentsPage } from './pages/patient/PatientPaymentsPage';
+import { PatientReportsPage } from './pages/patient/PatientReportsPage';
+import { MedicineMarketplacePage } from './pages/patient/MedicineMarketplacePage';
+import { MedicineOrdersPage } from './pages/patient/MedicineOrdersPage';
 
 // Doctor Portal Pages
 import { DoctorDashboard } from './pages/doctor/DoctorDashboard';
 import { DoctorAppointmentsPage } from './pages/doctor/DoctorAppointmentsPage';
 import { DoctorAvailabilityPage } from './pages/doctor/DoctorAvailabilityPage';
 
-// Hospital Admin Portal Pages
+// Hospital Admin & Staff Pages
 import { HospitalAdminDashboard } from './pages/hospital/HospitalAdminDashboard';
 import { HospitalDepartmentPage } from './pages/hospital/HospitalDepartmentPage';
 import { HospitalStaffPage } from './pages/hospital/HospitalStaffPage';
 import { HospitalComplaintsPage } from './pages/hospital/HospitalComplaintsPage';
+import { HospitalStaffDashboard } from './pages/staff/HospitalStaffDashboard';
 
 // Pharmacy Portal Pages
 import { PharmacyDashboard } from './pages/pharmacy/PharmacyDashboard';
 import { PharmacyInventoryPage } from './pages/pharmacy/PharmacyInventoryPage';
 import { PharmacyOrdersPage } from './pages/pharmacy/PharmacyOrdersPage';
+import { TransactionLedgerPage } from './pages/pharmacy/TransactionLedgerPage';
 
 // Diagnostic Lab Portal Pages
 import { LabDashboard } from './pages/laboratory/LabDashboard';
 import { LabCatalogPage } from './pages/laboratory/LabCatalogPage';
 import { LabSampleTrackingPage } from './pages/laboratory/LabSampleTrackingPage';
+
+// Supplier Portal Pages
+import { SupplierDashboard } from './pages/supplier/SupplierDashboard';
 
 // Central Admin Portal Pages
 import { CentralAdminDashboard } from './pages/admin/CentralAdminDashboard';
@@ -63,6 +74,9 @@ export const App: React.FC = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/roles" element={<RoleSelectorPage />} />
             <Route path="/emergency" element={<EmergencyPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/hospitals" element={<HospitalDiscoveryPage />} />
             <Route path="/hospitals/:id" element={<HospitalDetailPage />} />
             <Route path="/doctors" element={<DoctorSearchPage />} />
@@ -72,34 +86,52 @@ export const App: React.FC = () => {
           <Route element={<AppShell />}>
             {/* Patient Portal */}
             <Route path="/patient" element={<PatientDashboard />} />
+            <Route path="/patient/dashboard" element={<PatientDashboard />} />
             <Route path="/patient/appointments" element={<PatientAppointmentsPage />} />
+            <Route path="/patient/reports" element={<PatientReportsPage />} />
+            <Route path="/patient/marketplace" element={<MedicineMarketplacePage />} />
+            <Route path="/patient/orders" element={<MedicineOrdersPage />} />
             <Route path="/patient/profile" element={<PatientProfilePage />} />
             <Route path="/patient/records" element={<PatientMedicalRecordsPage />} />
             <Route path="/patient/payments" element={<PatientPaymentsPage />} />
 
             {/* Doctor Portal */}
             <Route path="/doctor" element={<DoctorDashboard />} />
+            <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
             <Route path="/doctor/appointments" element={<DoctorAppointmentsPage />} />
             <Route path="/doctor/availability" element={<DoctorAvailabilityPage />} />
 
             {/* Hospital Admin Portal */}
             <Route path="/hospital" element={<HospitalAdminDashboard />} />
+            <Route path="/hospital/dashboard" element={<HospitalAdminDashboard />} />
             <Route path="/hospital/departments" element={<HospitalDepartmentPage />} />
             <Route path="/hospital/staff" element={<HospitalStaffPage />} />
             <Route path="/hospital/complaints" element={<HospitalComplaintsPage />} />
 
+            {/* Hospital Staff Portal */}
+            <Route path="/staff" element={<HospitalStaffDashboard />} />
+            <Route path="/staff/dashboard" element={<HospitalStaffDashboard />} />
+
             {/* Pharmacy Portal */}
             <Route path="/pharmacy" element={<PharmacyDashboard />} />
+            <Route path="/pharmacy/dashboard" element={<PharmacyDashboard />} />
             <Route path="/pharmacy/inventory" element={<PharmacyInventoryPage />} />
+            <Route path="/pharmacy/transactions" element={<TransactionLedgerPage />} />
             <Route path="/pharmacy/orders" element={<PharmacyOrdersPage />} />
 
             {/* Diagnostic Laboratory Portal */}
             <Route path="/laboratory" element={<LabDashboard />} />
+            <Route path="/laboratory/dashboard" element={<LabDashboard />} />
             <Route path="/laboratory/catalog" element={<LabCatalogPage />} />
             <Route path="/laboratory/samples" element={<LabSampleTrackingPage />} />
 
+            {/* Medical Supplier Portal */}
+            <Route path="/supplier" element={<SupplierDashboard />} />
+            <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
+
             {/* Central Platform Admin Portal */}
             <Route path="/admin" element={<CentralAdminDashboard />} />
+            <Route path="/admin/dashboard" element={<CentralAdminDashboard />} />
             <Route path="/admin/verifications" element={<AdminProviderVerificationPage />} />
             <Route path="/admin/audit" element={<AdminAuditLogsPage />} />
             <Route path="/admin/disputes" element={<AdminDisputesPage />} />
