@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://server-bice-seven-58.vercel.app/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://server-bice-seven-58.vercel.app/uploads/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

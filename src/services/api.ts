@@ -1,6 +1,6 @@
 // Bharat HealthConnect Frontend API Client
 
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export interface ApiResponse<T = any> {
   success: boolean;
