@@ -11,6 +11,11 @@ import marketplaceRoutes from './routes/marketplace.routes.js';
 import labRoutes from './routes/lab.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
+import bedRoutes from './routes/bed.routes.js';
+import billingRoutes from './routes/billing.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
+import insuranceRoutes from './routes/insurance.routes.js';
+import financeRoutes from './routes/finance.routes.js';
 
 dotenv.config();
 
@@ -59,6 +64,17 @@ app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/lab', labRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/supplier', supplierRoutes);
+app.use('/api/beds', bedRoutes);
+
+// Billing, Payments & Finance Routes (v1 supported)
+app.use('/api/billing', billingRoutes);
+app.use('/api/v1/billing', billingRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/insurance', insuranceRoutes);
+app.use('/api/v1/insurance', insuranceRoutes);
+app.use('/api/finance', financeRoutes);
+app.use('/api/v1/finance', financeRoutes);
 
 // Error Handling Middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

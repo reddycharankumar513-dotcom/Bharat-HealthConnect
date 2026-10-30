@@ -22,7 +22,9 @@ import {
   Truck,
   Users,
   History,
-  Package
+  Package,
+  BedDouble,
+  Sparkles
 } from 'lucide-react';
 
 interface NavItem {
@@ -49,6 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
     patient: [
       { label: 'Patient Dashboard', path: '/patient', icon: <LayoutDashboard className="w-4 h-4" /> },
       { label: 'My Appointments', path: '/patient/appointments', icon: <Calendar className="w-4 h-4" />, count: scheduledApts },
+      { label: 'Inpatient Stay & Beds', path: '/patient/admissions', icon: <BedDouble className="w-4 h-4" /> },
       { label: 'Diagnostic Reports', path: '/patient/reports', icon: <FlaskConical className="w-4 h-4" /> },
       { label: 'Medicine Marketplace', path: '/patient/marketplace', icon: <Pill className="w-4 h-4" /> },
       { label: 'My Medicine Orders', path: '/patient/orders', icon: <Package className="w-4 h-4" /> },
@@ -61,16 +64,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
     doctor: [
       { label: 'Doctor Dashboard', path: '/doctor', icon: <LayoutDashboard className="w-4 h-4" /> },
       { label: 'Appointment Calendar', path: '/doctor/appointments', icon: <Calendar className="w-4 h-4" />, count: scheduledApts },
+      { label: 'Inpatients & Ward Rounds', path: '/doctor/inpatients', icon: <BedDouble className="w-4 h-4" /> },
       { label: 'Slot Availability', path: '/doctor/availability', icon: <Clock className="w-4 h-4" /> },
     ],
     hospital: [
       { label: 'Hospital Operations', path: '/hospital', icon: <LayoutDashboard className="w-4 h-4" /> },
-      { label: 'Departments & Beds', path: '/hospital/departments', icon: <Building2 className="w-4 h-4" /> },
+      { label: 'Bed Command Center', path: '/hospital/beds', icon: <BedDouble className="w-4 h-4" /> },
+      { label: 'Financial Management', path: '/hospital/finance', icon: <CreditCard className="w-4 h-4" /> },
+      { label: 'Wards & Rooms Layout', path: '/hospital/wards', icon: <Building2 className="w-4 h-4" /> },
+      { label: 'Inpatient Desk & Triage', path: '/hospital/admissions', icon: <Users className="w-4 h-4" /> },
+      { label: 'Housekeeping Desk', path: '/hospital/cleaning', icon: <Sparkles className="w-4 h-4" /> },
+      { label: 'ICU Telemetry Hub', path: '/hospital/icu', icon: <HeartPulse className="w-4 h-4" /> },
       { label: 'Doctors & Staff Roster', path: '/hospital/staff', icon: <Stethoscope className="w-4 h-4" /> },
       { label: 'Patient Complaints', path: '/hospital/complaints', icon: <AlertCircle className="w-4 h-4" /> },
     ],
     staff: [
       { label: 'Staff & Triage Hub', path: '/staff/dashboard', icon: <Users className="w-4 h-4" /> },
+      { label: 'Bed Grid & Availability', path: '/staff/beds', icon: <BedDouble className="w-4 h-4" /> },
+      { label: 'Billing & Cashier Desk', path: '/staff/finance', icon: <CreditCard className="w-4 h-4" /> },
+      { label: 'Inpatient Admissions', path: '/staff/admissions', icon: <Users className="w-4 h-4" /> },
+      { label: 'Housekeeping Desk', path: '/staff/cleaning', icon: <Sparkles className="w-4 h-4" /> },
       { label: 'Hospital Departments', path: '/hospital/departments', icon: <Building2 className="w-4 h-4" /> },
       { label: 'Patient Complaints', path: '/hospital/complaints', icon: <AlertCircle className="w-4 h-4" /> },
     ],
@@ -96,6 +109,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
     ],
     admin: [
       { label: 'Central Administration', path: '/admin', icon: <LayoutDashboard className="w-4 h-4" /> },
+      { label: 'Financial Management', path: '/admin/finance', icon: <CreditCard className="w-4 h-4" /> },
+      { label: 'Hospital Beds Network', path: '/hospital/beds', icon: <BedDouble className="w-4 h-4" /> },
       { label: 'Provider Verifications', path: '/admin/verifications', icon: <FileCheck2 className="w-4 h-4" />, count: pendingVerifs },
       { label: 'Audit & Security Logs', path: '/admin/audit', icon: <ShieldCheck className="w-4 h-4" /> },
       { label: 'Dispute Redressal', path: '/admin/disputes', icon: <AlertCircle className="w-4 h-4" /> },

@@ -62,6 +62,20 @@ export const api = {
     }
   },
 
+  patch: async <T = any>(endpoint: string, body?: any): Promise<ApiResponse<T>> => {
+    try {
+      const isFormData = body instanceof FormData;
+      const res = await fetch(`${BASE_URL}${endpoint}`, {
+        method: 'PATCH',
+        headers: getHeaders(isFormData),
+        body: isFormData ? body : (body ? JSON.stringify(body) : undefined)
+      });
+      return await res.json();
+    } catch (error: any) {
+      return { success: false, message: error.message || 'Network request failed.' };
+    }
+  },
+
   delete: async <T = any>(endpoint: string): Promise<ApiResponse<T>> => {
     try {
       const res = await fetch(`${BASE_URL}${endpoint}`, {
