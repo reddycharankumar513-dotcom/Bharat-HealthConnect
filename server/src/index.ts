@@ -38,6 +38,9 @@ try {
   console.warn('Could not create upload directory:', e);
 }
 
+// Serve uploaded static files
+app.use('/uploads', express.static(uploadDir));
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({

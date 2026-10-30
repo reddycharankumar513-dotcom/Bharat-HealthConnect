@@ -1,16 +1,33 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "app": {
+      "root": ".",
+      "framework": "vite"
+    },
+    "server": {
+      "root": "server",
+      "framework": "express"
+    }
+  },
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://server-blush-pi.vercel.app/api/:path*"
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "server"
+      }
     },
     {
-      "source": "/uploads/:path*",
-      "destination": "https://server-blush-pi.vercel.app/uploads/:path*"
+      "source": "/uploads/(.*)",
+      "destination": {
+        "service": "server"
+      }
     },
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": {
+        "service": "app"
+      }
     }
   ]
 }
