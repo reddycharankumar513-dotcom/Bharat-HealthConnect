@@ -4,6 +4,8 @@ import { useApp } from '../../context/AppContext';
 import { mockHospitals } from '../../data/mockHospitals';
 import { mockDoctors } from '../../data/mockDoctors';
 import { mockDiagnosticTests } from '../../data/mockLabTests';
+import { TiltCard3D } from '../../components/common/TiltCard3D';
+import { BioInnovation3DCanvas } from '../../components/3d/BioInnovation3DCanvas';
 import { 
   Search, 
   MapPin, 
@@ -24,7 +26,10 @@ import {
   Sparkles,
   Zap,
   Activity,
-  HeartPulse
+  HeartPulse,
+  Layers,
+  Cpu,
+  Eye
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -57,7 +62,6 @@ export const LandingPage: React.FC = () => {
     } else if (searchCategory === 'diagnostics') {
       navigate('/laboratory/catalog');
     } else {
-      // If user typed something, check if they typed a symptom or doctor
       if (query.trim()) {
         navigate(`/doctors?symptom=${encodeURIComponent(query.trim())}`);
       } else {
@@ -68,27 +72,31 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="space-y-16 pb-16">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/70 via-white to-slate-50 pt-12 pb-20 border-b border-slate-200/60">
+      {/* 3D Bio-Innovation Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/70 via-white to-slate-50 pt-8 pb-16 border-b border-slate-200/60 perspective-1000">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100/80 text-teal-800 text-xs font-semibold tracking-wide border border-teal-200">
-              <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-              <span>Ayushman Bharat Digital Ecosystem (ABDM Ready)</span>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Left Column: Headlines, Unified Search & 3D Badges */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100/80 text-teal-900 text-xs font-semibold tracking-wide border border-teal-200 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-spin" style={{ animationDuration: '6s' }} />
+                <span>Ayushman Bharat Digital Ecosystem (ABDM Ready)</span>
+              </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              One Nation. <br />
-              <span className="text-teal-600">One Connected Healthcare</span> Ecosystem.
-            </h1>
+              <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                One Nation. <br />
+                <span className="text-teal-600 bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-sky-600">
+                  One Connected Healthcare
+                </span> Ecosystem.
+              </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Seamlessly discover top verified doctors, NABH hospitals, accredited diagnostic laboratories, and neighborhood pharmacies across India. Empowered by ABHA health IDs.
-            </p>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+                Seamlessly discover top verified doctors, NABH hospitals, accredited diagnostic laboratories, and neighborhood pharmacies across India. Empowered by ABHA health IDs & 3D digital telemetry.
+              </p>
 
-            {/* Universal Healthcare Search Bar */}
-            <div className="pt-4 max-w-4xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-elevated border border-slate-200 p-2 sm:p-3">
+              {/* Universal Healthcare Search Bar */}
+              <div className="bg-white rounded-2xl shadow-3d-card border border-slate-200/90 p-2 sm:p-3 transform-style-3d hover:shadow-3d-float transition-all duration-300">
                 {/* Search Type Tabs */}
                 <div className="flex items-center gap-1 pb-3 mb-2 border-b border-slate-100 overflow-x-auto">
                   {[
@@ -116,7 +124,6 @@ export const LandingPage: React.FC = () => {
 
                 {/* Search Inputs */}
                 <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-2">
-                  {/* Query input */}
                   <div className="md:col-span-6 relative flex items-center">
                     <Search className="w-4 h-4 text-slate-400 absolute left-3" />
                     <input
@@ -125,14 +132,13 @@ export const LandingPage: React.FC = () => {
                       onChange={e => setQuery(e.target.value)}
                       placeholder={
                         searchCategory === 'symptoms'
-                          ? 'Describe symptoms (e.g. chest pain, high sugar, knee pain, migraine)...'
+                          ? 'Describe symptoms (e.g. chest pain, high sugar, knee pain)...'
                           : 'Specialty, Doctor name, Hospital, or Test...'
                       }
-                      className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-teal-500 focus:bg-white"
+                      className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
                     />
                   </div>
 
-                  {/* Location selector */}
                   <div className="md:col-span-3 relative flex items-center">
                     <MapPin className="w-4 h-4 text-slate-400 absolute left-3" />
                     <select
@@ -150,11 +156,10 @@ export const LandingPage: React.FC = () => {
                     </select>
                   </div>
 
-                  {/* Action button */}
                   <div className="md:col-span-3">
                     <button
                       type="submit"
-                      className="w-full py-2.5 px-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md transition-colors flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 px-4 bg-teal-600 text-white font-semibold rounded-xl text-xs sm:text-sm btn-3d-primary flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span>{searchCategory === 'symptoms' ? 'Match Specialists' : 'Search Providers'}</span>
                       <ArrowRight className="w-4 h-4" />
@@ -164,40 +169,66 @@ export const LandingPage: React.FC = () => {
               </div>
 
               {/* Symptom Quick Match Chips */}
-              <div className="mt-3.5 flex flex-wrap items-center justify-center gap-1.5 text-xs">
+              <div className="flex flex-wrap items-center gap-1.5 text-xs pt-1">
                 <span className="font-bold text-slate-600 flex items-center gap-1 text-[11px] uppercase tracking-wider mr-1">
                   <HeartPulse className="w-3.5 h-3.5 text-rose-500" />
-                  Find by Symptom:
+                  Quick Symptoms:
                 </span>
                 {[
                   { label: 'Chest Pain', query: 'Chest Pain' },
                   { label: 'Fever & Chills', query: 'Fever & Chills' },
                   { label: 'Severe Headache', query: 'Severe Headache' },
                   { label: 'Knee Pain', query: 'Knee Pain' },
-                  { label: 'High Sugar / Thirst', query: 'High Blood Sugar' },
+                  { label: 'High Sugar', query: 'High Blood Sugar' },
                   { label: 'Child Cough', query: 'Child Cough' },
-                  { label: 'Back Pain', query: 'Back Pain' },
                 ].map(s => (
                   <Link
                     key={s.label}
                     to={`/doctors?symptom=${encodeURIComponent(s.query)}`}
-                    className="px-2.5 py-1 bg-white hover:bg-teal-50 hover:text-teal-700 hover:border-teal-300 text-slate-700 rounded-lg border border-slate-200 shadow-2xs text-[11px] font-medium transition-colors"
+                    className="px-2.5 py-1 bg-white hover:bg-teal-50 hover:text-teal-700 hover:border-teal-300 text-slate-700 rounded-lg border border-slate-200 shadow-2xs text-[11px] font-medium transition-all"
                   >
                     {s.label}
                   </Link>
                 ))}
               </div>
+
+              {/* Quick 3D Action Buttons */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/roles"
+                  className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs flex items-center gap-2 shadow-sm transition-all"
+                >
+                  <Layers className="w-4 h-4 text-teal-400" />
+                  <span>Preview 6 Role Portals</span>
+                </Link>
+                <Link
+                  to="/emergency"
+                  className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl text-xs flex items-center gap-2 shadow-sm transition-all"
+                >
+                  <PhoneCall className="w-4 h-4 text-white" />
+                  <span>24x7 Emergency (112)</span>
+                </Link>
+              </div>
             </div>
+
+            {/* Right Column: 3D Interactive Healthcare Mesh Canvas */}
+            <div className="lg:col-span-5 h-[440px] w-full">
+              <BioInnovation3DCanvas />
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Popular Medical Specialties */}
+      {/* Popular Medical Specialties - 3D Tilt Cards */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
               Popular Medical Specialties
+              <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+                Interactive 3D
+              </span>
             </h2>
             <p className="text-xs text-slate-500 mt-1">
               Consult with board-certified super-specialists across verified clinical departments
@@ -214,24 +245,25 @@ export const LandingPage: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {specialties.map(spec => (
-            <Link
-              key={spec.name}
-              to="/doctors"
-              className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-card hover:shadow-elevated hover:border-teal-300 transition-all text-center group"
-            >
-              <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">
-                {spec.icon}
-              </div>
-              <h4 className="text-sm font-bold text-slate-800 group-hover:text-teal-600 transition-colors">
-                {spec.name}
-              </h4>
-              <p className="text-[11px] text-slate-400 mt-1">{spec.count}</p>
-            </Link>
+            <TiltCard3D key={spec.name} maxTilt={14} scale={1.05} className="rounded-2xl">
+              <Link
+                to="/doctors"
+                className="block p-4 rounded-2xl bg-white border border-slate-200/80 shadow-3d-card hover:shadow-3d-teal hover:border-teal-300 transition-all text-center group h-full"
+              >
+                <div className="text-3xl mb-2 group-hover:scale-125 transition-transform translate-z-30 duration-300 drop-shadow-sm">
+                  {spec.icon}
+                </div>
+                <h4 className="text-sm font-bold text-slate-800 group-hover:text-teal-600 transition-colors translate-z-20">
+                  {spec.name}
+                </h4>
+                <p className="text-[11px] text-slate-400 mt-1 translate-z-10">{spec.count}</p>
+              </Link>
+            </TiltCard3D>
           ))}
         </div>
       </section>
 
-      {/* Featured Hospitals Showcase */}
+      {/* Featured Hospitals Showcase - 3D Tilt Cards */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -253,72 +285,73 @@ export const LandingPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {mockHospitals.slice(0, 3).map(hospital => (
-            <div
-              key={hospital.id}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-card hover:shadow-elevated transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative h-44 overflow-hidden bg-slate-100">
-                  <img
-                    src={hospital.image}
-                    alt={hospital.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-3 left-3 flex gap-1.5">
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-800 shadow">
-                      {hospital.type}
-                    </span>
-                    {hospital.ayushmanEmpanelled && (
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-600 text-white shadow">
-                        ABHA Empanelled
+            <TiltCard3D key={hospital.id} maxTilt={8} scale={1.02} className="rounded-2xl">
+              <div
+                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-3d-card hover:shadow-3d-float transition-all flex flex-col justify-between h-full"
+              >
+                <div>
+                  <div className="relative h-44 overflow-hidden bg-slate-100">
+                    <img
+                      src={hospital.image}
+                      alt={hospital.name}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-3 left-3 flex gap-1.5 translate-z-20">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-800 shadow-sm">
+                        {hospital.type}
                       </span>
-                    )}
+                      {hospital.ayushmanEmpanelled && (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-600 text-white shadow-sm">
+                          ABHA Empanelled
+                        </span>
+                      )}
+                    </div>
+                    <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-full text-xs font-bold bg-slate-900/85 text-white flex items-center gap-1 shadow-sm translate-z-20">
+                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                      <span>{hospital.rating}</span>
+                    </div>
                   </div>
-                  <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-full text-xs font-bold bg-slate-900/85 text-white flex items-center gap-1">
-                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                    <span>{hospital.rating}</span>
+
+                  <div className="p-5 space-y-3">
+                    <div>
+                      <h3 className="font-bold text-base text-slate-900 line-clamp-1">{hospital.name}</h3>
+                      <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                        <span>{hospital.city}, {hospital.state}</span>
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1">
+                      {hospital.specialties.slice(0, 3).map(s => (
+                        <span key={s} className="px-2 py-0.5 text-[11px] bg-slate-100 text-slate-700 rounded-md">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                      <span>Bed Capacity: <strong>{hospital.bedCapacity}</strong></span>
+                      <span className="text-emerald-600 font-semibold">{hospital.availableBedsDemo} Avail (Demo)</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-5 space-y-3">
-                  <div>
-                    <h3 className="font-bold text-base text-slate-900 line-clamp-1">{hospital.name}</h3>
-                    <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
-                      <span>{hospital.city}, {hospital.state}</span>
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1">
-                    {hospital.specialties.slice(0, 3).map(s => (
-                      <span key={s} className="px-2 py-0.5 text-[11px] bg-slate-100 text-slate-700 rounded-md">
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>Bed Capacity: <strong>{hospital.bedCapacity}</strong></span>
-                    <span className="text-emerald-600 font-semibold">{hospital.availableBedsDemo} Avail (Demo)</span>
-                  </div>
+                <div className="p-5 pt-0">
+                  <Link
+                    to={`/hospitals/${hospital.id}`}
+                    className="w-full py-2.5 px-3 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
+                  >
+                    <span>View Details & Doctors</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </div>
-
-              <div className="p-5 pt-0">
-                <Link
-                  to={`/hospitals/${hospital.id}`}
-                  className="w-full py-2 px-3 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
-                >
-                  <span>View Details & Doctors</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
+            </TiltCard3D>
           ))}
         </div>
       </section>
 
-      {/* Featured Doctors */}
+      {/* Featured Doctors - 3D Tilt Cards */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -340,64 +373,120 @@ export const LandingPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {mockDoctors.slice(0, 3).map(doc => (
-            <div
-              key={doc.id}
-              className="bg-white rounded-2xl border border-slate-200 p-5 shadow-card hover:shadow-elevated transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <img
-                    src={doc.avatar}
-                    alt={doc.name}
-                    className="w-16 h-16 rounded-2xl object-cover border border-slate-200"
-                  />
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <h3 className="font-bold text-sm text-slate-900">{doc.name}</h3>
-                      {doc.verified && (
-                        <span title="Verified Medical License">
-                          <CheckCircle2 className="w-4 h-4 text-teal-600 flex-shrink-0" />
-                        </span>
-                      )}
+            <TiltCard3D key={doc.id} maxTilt={8} scale={1.02} className="rounded-2xl">
+              <div
+                className="bg-white rounded-2xl border border-slate-200 p-5 shadow-3d-card hover:shadow-3d-float transition-all flex flex-col justify-between h-full"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <img
+                      src={doc.avatar}
+                      alt={doc.name}
+                      className="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                    />
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="font-bold text-sm text-slate-900">{doc.name}</h3>
+                        {doc.verified && (
+                          <span title="Verified Medical License">
+                            <CheckCircle2 className="w-4 h-4 text-teal-600 flex-shrink-0" />
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs font-medium text-teal-700 mt-0.5">{doc.specialty}</p>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{doc.qualification}</p>
                     </div>
-                    <p className="text-xs font-medium text-teal-700 mt-0.5">{doc.specialty}</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{doc.qualification}</p>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Experience</span>
+                      <span className="font-semibold">{doc.experienceYears}+ Years</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Languages</span>
+                      <span className="font-medium truncate max-w-[150px]">{doc.languages.join(', ')}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Consultation Fee</span>
+                      <span className="font-bold text-slate-900">₹{doc.consultationFee}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Experience</span>
-                    <span className="font-semibold">{doc.experienceYears}+ Years</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Languages</span>
-                    <span className="font-medium truncate max-w-[150px]">{doc.languages.join(', ')}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Consultation Fee</span>
-                    <span className="font-bold text-slate-900">₹{doc.consultationFee}</span>
-                  </div>
+                <div className="pt-4 flex gap-2">
+                  <Link
+                    to="/doctors"
+                    className="flex-1 py-2 px-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-semibold text-center transition-colors btn-3d-primary"
+                  >
+                    Book Appointment
+                  </Link>
+                  <button
+                    onClick={() => setIsAiModalOpen(true)}
+                    className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors btn-3d-white"
+                    title="Ask AI about this doctor"
+                  >
+                    <Sparkles className="w-4 h-4 text-teal-600" />
+                  </button>
                 </div>
               </div>
+            </TiltCard3D>
+          ))}
+        </div>
+      </section>
 
-              <div className="pt-4 flex gap-2">
-                <Link
-                  to="/doctors"
-                  className="flex-1 py-2 px-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-semibold text-center transition-colors shadow-xs"
-                >
-                  Book Appointment
-                </Link>
-                <button
-                  onClick={() => setIsAiModalOpen(true)}
-                  className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors"
-                  title="Ask AI about this doctor"
-                >
-                  <Sparkles className="w-4 h-4 text-teal-600" />
-                </button>
+      {/* 3D Bio-Innovation Telemetry Grid Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 text-white rounded-3xl p-8 sm:p-10 shadow-3d-float relative overflow-hidden border border-teal-500/30">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-semibold border border-teal-500/30">
+                <Cpu className="w-3.5 h-3.5 text-teal-400" />
+                <span>3D Unified Health Grid Telemetry</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                Real-Time Bio-Innovation & Health Mesh
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                Bharat HealthConnect connects clinical OPD queues, ICUs, phlebotomy pipelines, and pharmacy supply chains into a synchronized nationwide healthcare cloud under FHIR HL7 standards.
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+                <div className="p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                  <div className="text-2xl font-black text-teal-400">99.98%</div>
+                  <div className="text-[11px] text-slate-400 font-medium">Gateway Uptime</div>
+                </div>
+                <div className="p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                  <div className="text-2xl font-black text-sky-400">1.2M+</div>
+                  <div className="text-[11px] text-slate-400 font-medium">ABHA IDs Linked</div>
+                </div>
+                <div className="p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                  <div className="text-2xl font-black text-emerald-400">&lt; 15 min</div>
+                  <div className="text-[11px] text-slate-400 font-medium">Avg OPD Triage</div>
+                </div>
+                <div className="p-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center">
+                  <div className="text-2xl font-black text-amber-400">100%</div>
+                  <div className="text-[11px] text-slate-400 font-medium">DPDP Guarded</div>
+                </div>
               </div>
             </div>
-          ))}
+
+            <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-3">
+              <Link
+                to="/roles"
+                className="w-full py-3 px-5 bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold rounded-2xl text-center text-sm shadow-3d-teal transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Eye className="w-4 h-4" />
+                <span>Launch Role Simulators</span>
+              </Link>
+              <Link
+                to="/patient"
+                className="w-full py-2.5 px-5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-2xl text-center text-xs border border-white/20 transition-all"
+              >
+                Open Patient Health Locker
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -405,7 +494,7 @@ export const LandingPage: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Diagnostic Card */}
-          <div className="bg-gradient-to-br from-teal-900 to-medblue-950 text-white rounded-3xl p-8 relative overflow-hidden shadow-elevated">
+          <div className="bg-gradient-to-br from-teal-900 to-medblue-950 text-white rounded-3xl p-8 relative overflow-hidden shadow-3d-card border border-teal-500/20">
             <div className="relative z-10 space-y-4 max-w-md">
               <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-teal-500/20 text-teal-300 border border-teal-500/30">
                 NABL Accredited Diagnostics
@@ -435,7 +524,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Pharmacy Card */}
-          <div className="bg-gradient-to-br from-slate-900 to-teal-950 text-white rounded-3xl p-8 relative overflow-hidden shadow-elevated">
+          <div className="bg-gradient-to-br from-slate-900 to-teal-950 text-white rounded-3xl p-8 relative overflow-hidden shadow-3d-card border border-teal-500/20">
             <div className="relative z-10 space-y-4 max-w-md">
               <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 Connected Smart Pharmacy

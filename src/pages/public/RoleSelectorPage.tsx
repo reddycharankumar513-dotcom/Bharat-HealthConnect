@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
+import { TiltCard3D } from '../../components/common/TiltCard3D';
 import { 
   Users, 
   Stethoscope, 
@@ -175,54 +176,55 @@ export const RoleSelectorPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid of 9 Roles */}
+      {/* Grid of 9 Roles in 3D */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {roles.map(card => (
-          <div
-            key={card.role}
-            onClick={() => handleSelectRole(card)}
-            className={`bg-white rounded-3xl border border-slate-200/90 p-6 shadow-card hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group ${card.borderAccent}`}
-          >
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className={`w-12 h-12 rounded-2xl ${card.themeColor} flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform`}>
-                  {card.icon}
-                </div>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">
-                  {card.badge}
-                </span>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-teal-700 transition-colors">
-                  {card.title}
-                </h3>
-                <p className="text-xs text-slate-500 mt-1 line-clamp-3 leading-relaxed">
-                  {card.description}
-                </p>
-              </div>
-
-              {/* Persona Pill */}
-              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-600 font-medium">
-                {card.persona}
-              </div>
-
-              {/* Features List */}
-              <div className="space-y-1.5 pt-1">
-                {card.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-600">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
-                    <span className="truncate">{feat}</span>
+          <TiltCard3D key={card.role} maxTilt={9} scale={1.02} className="rounded-3xl h-full">
+            <div
+              onClick={() => handleSelectRole(card)}
+              className={`bg-white rounded-3xl border border-slate-200/90 p-6 shadow-3d-card hover:shadow-3d-float transition-all duration-300 cursor-pointer flex flex-col justify-between h-full group ${card.borderAccent}`}
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className={`w-12 h-12 rounded-2xl ${card.themeColor} flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform translate-z-20`}>
+                    {card.icon}
                   </div>
-                ))}
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 shadow-2xs translate-z-10">
+                    {card.badge}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-teal-700 transition-colors translate-z-10">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-1 line-clamp-3 leading-relaxed">
+                    {card.description}
+                  </p>
+                </div>
+
+                {/* Persona Pill */}
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-600 font-medium">
+                  {card.persona}
+                </div>
+
+                {/* Features List */}
+                <div className="space-y-1.5 pt-1">
+                  {card.features.map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-600">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
+                      <span className="truncate">{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-slate-100 mt-4 flex items-center justify-between text-xs font-bold text-teal-700 group-hover:translate-x-1 transition-transform">
+                <span>Launch {card.title}</span>
+                <ArrowRight className="w-4 h-4" />
               </div>
             </div>
-
-            <div className="pt-6 border-t border-slate-100 mt-4 flex items-center justify-between text-xs font-bold text-teal-700 group-hover:translate-x-1 transition-transform">
-              <span>Launch {card.title}</span>
-              <ArrowRight className="w-4 h-4" />
-            </div>
-          </div>
+          </TiltCard3D>
         ))}
       </div>
     </div>

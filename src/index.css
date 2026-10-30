@@ -9,6 +9,150 @@
   }
 }
 
+/* 3D Transform and Spatial Utilities */
+.perspective-800 {
+  perspective: 800px;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1500 {
+  perspective: 1500px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.translate-z-10 {
+  transform: translateZ(10px);
+}
+
+.translate-z-20 {
+  transform: translateZ(20px);
+}
+
+.translate-z-30 {
+  transform: translateZ(30px);
+}
+
+.translate-z-40 {
+  transform: translateZ(40px);
+}
+
+/* 3D Volumetric Card & Surface Shadows */
+.shadow-3d-teal {
+  box-shadow: 
+    0 10px 30px -10px rgba(13, 148, 136, 0.25),
+    0 20px 25px -5px rgba(13, 148, 136, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.shadow-3d-blue {
+  box-shadow: 
+    0 10px 30px -10px rgba(14, 165, 233, 0.25),
+    0 20px 25px -5px rgba(14, 165, 233, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.shadow-3d-card {
+  box-shadow: 
+    0 12px 30px -8px rgba(15, 23, 42, 0.08),
+    0 4px 12px -2px rgba(15, 23, 42, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.shadow-3d-float {
+  box-shadow: 
+    0 25px 50px -12px rgba(15, 23, 42, 0.15),
+    0 0 0 1px rgba(15, 23, 42, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 3D Tactile Buttons */
+.btn-3d-primary {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 0 #0f766e,
+    0 8px 16px -2px rgba(13, 148, 136, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-3d-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 5px 0 #0f766e,
+    0 12px 20px -2px rgba(13, 148, 136, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-3d-primary:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 #0f766e,
+    0 4px 8px -2px rgba(13, 148, 136, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-3d-white {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 3px 0 #cbd5e1,
+    0 6px 12px -2px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.btn-3d-white:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 0 #cbd5e1,
+    0 8px 16px -2px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.btn-3d-white:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 1px 0 #cbd5e1,
+    0 2px 4px -1px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 3D Gentle Floating Animation */
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+.animate-float-3d {
+  animation: float3d 5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
 /* Custom scrollbar for clean dashboard styling */
 ::-webkit-scrollbar {
   width: 6px;
